@@ -1,0 +1,15 @@
+﻿<vm:MainViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:MumbleWP8.ViewModels"
+    SampleProperty="Sample Text Property Value">
+
+    <vm:MainViewModel.ChannelFlat>
+        <vm:ChannelViewItem Icon="Icons/channel.png" Label="test1" Level="0" />
+        <vm:ChannelViewItem Icon="Icons/channel.png" Label="test2" Level="1" />
+        <vm:ChannelViewItem Icon="Icons/talking_off.png" Label="test3" Level="2" />
+        <vm:ChannelViewItem Icon="Icons/channel.png" Label="test4" Level="1" />
+        <vm:ChannelViewItem Icon="Icons/talking_off.png" Label="test5" Level="2" />
+    </vm:MainViewModel.ChannelFlat>
+
+</vm:MainViewModel>

@@ -1,0 +1,113 @@
+﻿<phone:PhoneApplicationPage
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:Controls="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
+    x:Class="MumbleWP8.Settings"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <!--Pivot Control-->
+        <phone:Pivot Title="MUMBLE - PREFERENCES">
+            <phone:PivotItem Header="Transmission">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <TextBlock HorizontalAlignment="Left" Text="Type" Margin="13,0,0,0" />
+                    <toolkit:ListPicker SelectionChanged="ListPicker_SelectionChanged">
+                        <toolkit:ListPickerItem Content="Voice activated" />
+                        <toolkit:ListPickerItem Content="Push-to-talk" />
+                        <toolkit:ListPickerItem Content="Continuous"/>
+                    </toolkit:ListPicker>
+                    <StackPanel Margin="13" x:Name="VoiceActivated" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="400">
+                        <TextBlock HorizontalAlignment="Left" Text="Method" />
+                        <toolkit:ListPicker>
+                            <toolkit:ListPickerItem Content="Amplitude" />
+                            <toolkit:ListPickerItem Content="Signal to noise" />
+                        </toolkit:ListPicker>
+                        <TextBlock Text="Preview" />
+                        <Controls:SuperSlider x:Name="preview"  Margin="10,10,10,-20"
+	                        Title="Slider with thumb, custom sizing and &quot;flair&quot;"
+	                        BackgroundSize="40"
+	                        ProgressSize="40" IsHitTestVisible="False" Value="5">
+                            <Controls:SuperSlider.Foreground>
+                                <SolidColorBrush Opacity="0.6" Color="White" />
+                            </Controls:SuperSlider.Foreground>
+                            <Controls:SuperSlider.Background>
+                                <LinearGradientBrush  EndPoint="1,0">
+                                    <GradientStop Offset="0" Color="Red"/>
+                                    <GradientStop x:Name="Silence1" Offset="0.6" Color="Red"/>
+                                    <GradientStop x:Name="Silence2" Offset="0.6" Color="Gold"/>
+                                    <GradientStop x:Name="Speech1" Offset="0.8" Color="Gold"/>
+                                    <GradientStop x:Name="Speech2" Offset="0.8" Color="ForestGreen"/>
+                                </LinearGradientBrush>
+                            </Controls:SuperSlider.Background>
+                        </Controls:SuperSlider>
+                        <TextBlock Text="Silence below" />
+                        <Slider x:Name="SilenceSlider" Margin="0,0,0,-30" Foreground="Red" ValueChanged="Slider_ValueChanged" Value="60" Maximum="100" />
+                        <TextBlock Text="Speech above" />
+                        <Slider x:Name="SpeechSlider" Margin="0,-30,0,0" Foreground="Green" RenderTransformOrigin="0.5,0.5" Height="87" Value="20" Maximum="100" ValueChanged="Slider_ValueChanged_1">
+                            <Slider.RenderTransform>
+                                <CompositeTransform Rotation="180"/>
+                            </Slider.RenderTransform>
+                        </Slider>
+                    </StackPanel>
+                    <StackPanel Margin="13" Visibility="Collapsed" x:Name="PushActivated" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="400">
+                        <TextBlock Text="Press the icon on the channel view to transmit audio" />
+                        <Image Height="100"/>
+                    </StackPanel>
+                    <StackPanel Margin="13" Visibility="Collapsed"  x:Name="ContActivated">
+                        <TextBlock Text="Audio will be continously transmitted" />
+                    </StackPanel>
+                    
+                </StackPanel>
+            </phone:PivotItem>
+            <phone:PivotItem Header="Audio">
+                <ScrollViewer>
+                <StackPanel Margin="10" >
+                    <TextBlock  TextWrapping="Wrap" Text="Transmission quality" Grid.Column="0" Grid.Row="0"/>
+                    <toolkit:ListPicker SelectionChanged="ListPicker_SelectionChanged" Grid.Row="0" Grid.Column="1">
+                        <toolkit:ListPickerItem Content="Balance" />
+                        <toolkit:ListPickerItem Content="High" />
+                        <toolkit:ListPickerItem Content="Low"/>
+                    </toolkit:ListPicker>
+
+                    
+
+                    <TextBlock TextWrapping="Wrap" Text="Input preprocessing"/>
+                    <toolkit:ToggleSwitch Margin="0,-25,0,-25"/>
+                    <TextBlock TextWrapping="Wrap" Text="Echo cancellation"/>
+                    <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                    <TextBlock TextWrapping="Wrap" Text="Speakerphone mode"/>
+                    <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                    <TextBlock TextWrapping="Wrap" Text="Output sidetone"/>
+                    <toolkit:ToggleSwitch Margin="0,-25,0,-25" Checked="ToggleSwitch_Checked" Unchecked="ToggleSwitch_Unchecked" />
+                    <StackPanel x:Name="Sidetone" Visibility="Collapsed">
+                        <TextBlock TextWrapping="Wrap" Text="Sidetone volume"/>
+                        <Slider />
+                    </StackPanel>
+                    <TextBlock TextWrapping="Wrap" Text="Opus Codec: Force CELT mode"/>
+                    <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                    </StackPanel>
+                </ScrollViewer>
+            </phone:PivotItem>
+            <phone:PivotItem Header="Network" >
+                <StackPanel Margin="10">
+                   <TextBlock Text="Force TCP mode" />
+                   <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                   <TextBlock Text="Certificates" />
+                    <Button Content="Manage certificates" Click="Button_Click"/>
+                </StackPanel>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+
+</phone:PhoneApplicationPage>
