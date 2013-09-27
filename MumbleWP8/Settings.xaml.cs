@@ -18,22 +18,15 @@ namespace MumbleWP8
         {
             InitializeComponent();
 
-            preview.DataContext = App.ViewModel;
+            DataContext = App.ViewModel;
         }
 
 
 
-        private void Slider_SlienceThres(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void SliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            App.ViewModel.SilenceSlider = (e.NewValue) / 100;
             UpdatePreview();
 
-        }
-        
-        private void Slider_SpeechThres(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            App.ViewModel.SpeechSlider = (100 - e.NewValue) / 100;
-            UpdatePreview();
         }
 
         private void UpdatePreview()
@@ -51,18 +44,16 @@ namespace MumbleWP8
 
         private void ListPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (VoiceActivated != null && e.AddedItems.Count == 1)
+            if (e.AddedItems.Count == 1 && VoiceActivated != null && PushActivated != null && ContActivated != null)
             {
-                VoiceActivated.Visibility = ((e.AddedItems[0] as ListPickerItem).Content.ToString() == "Voice activated") ? Visibility.Visible : Visibility.Collapsed;
+                App.ViewModel.ActivationType = (MumbleWP8.ViewModels.MainViewModel.Activation)e.AddedItems[0];
+
+                VoiceActivated.Visibility = (App.ViewModel.ActivationType == MumbleWP8.ViewModels.MainViewModel.Activation.voice) ? Visibility.Visible : Visibility.Collapsed; 
+                PushActivated.Visibility = (App.ViewModel.ActivationType == MumbleWP8.ViewModels.MainViewModel.Activation.Pushtospeak) ? Visibility.Visible : Visibility.Collapsed;
+                ContActivated.Visibility = (App.ViewModel.ActivationType == MumbleWP8.ViewModels.MainViewModel.Activation.continous) ? Visibility.Visible : Visibility.Collapsed;
             }
-            if (PushActivated != null && e.AddedItems.Count == 1)
-            {
-                PushActivated.Visibility = ((e.AddedItems[0] as ListPickerItem).Content.ToString() == "Push-to-talk") ? Visibility.Visible : Visibility.Collapsed;
-            }
-            if (ContActivated != null && e.AddedItems.Count == 1)
-            {
-                ContActivated.Visibility = ((e.AddedItems[0] as ListPickerItem).Content.ToString() == "Continuous") ? Visibility.Visible : Visibility.Collapsed;
-            }
+            
+            
         }
 
         private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)
