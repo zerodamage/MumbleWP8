@@ -116,7 +116,6 @@
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsAccess.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
   </ItemGroup>
@@ -184,8 +183,10 @@
     <Content Include="Images\checkbox.selectall.png" />
     <Content Include="Images\close.png" />
     <Content Include="Images\closet.png" />
+    <Content Include="Images\connect.png" />
     <Content Include="Images\delete.png" />
     <Content Include="Images\dialpad.png" />
+    <Content Include="Images\disconnect.png" />
     <Content Include="Images\download.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\edittext.png" />
@@ -227,6 +228,7 @@
     <Content Include="Images\marketplace.png" />
     <Content Include="Images\mic.png" />
     <Content Include="Images\microphone.png" />
+    <Content Include="Images\microphone_off.png" />
     <Content Include="Images\minus.png" />
     <Content Include="Images\new.png" />
     <Content Include="Images\next.png" />

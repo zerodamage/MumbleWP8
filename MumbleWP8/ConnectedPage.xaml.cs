@@ -27,6 +27,10 @@ namespace MumbleWP8
             DataContext = App.ViewModel;
         }
 
+        ApplicationBarIconButton connectionButton;
+        ApplicationBarIconButton muteButton;
+        ApplicationBarIconButton sprkButton;
+
 
         // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -35,16 +39,85 @@ namespace MumbleWP8
             {
                 App.ViewModel.LoadData();
             }
-            foreach (ChannelViewItem usr in App.ViewModel.ChannelFlat)
+            foreach (ChannelItem usr in App.ViewModel.ChannelFlat)
             {
                 usr.ContextItems[0].Click += sndmsg_Tap;
             }
             chatTarget.DataContext = App.ViewModel.ChannelFlat[0];
+
+            ApplicationBar = new ApplicationBar();
+
+            connectionButton = new ApplicationBarIconButton();
+            connectionButton.IconUri = new Uri("/Images/disconnect.png", UriKind.Relative);
+            connectionButton.Text = "disconnect";
+            ApplicationBar.Buttons.Add(connectionButton);
+            connectionButton.Click += connectionButton_Click;
+
+            
+            muteButton = new ApplicationBarIconButton();
+            muteButton.IconUri = new Uri("/Images/microphone.png", UriKind.Relative);
+            muteButton.Text = "microphone";
+            ApplicationBar.Buttons.Add(muteButton);
+            muteButton.Click += muteButton_Click;
+
+            
+            sprkButton = new ApplicationBarIconButton();
+            sprkButton.IconUri = new Uri("/Images/speaker.png", UriKind.Relative);
+            sprkButton.Text = "speaker";
+            ApplicationBar.Buttons.Add(sprkButton);
+            sprkButton.Click += sprkButton_Click;
+
+            ApplicationBarMenuItem menuItem1 = new ApplicationBarMenuItem();
+            menuItem1.Text = "settings...";
+            ApplicationBar.MenuItems.Add(menuItem1);
+            menuItem1.Click += new EventHandler(ApplicationBarMenuItem_Click);
         }
+
+        void sprkButton_Click(object sender, EventArgs e)
+        {
+            App.ViewModel.SpeakerOn = !App.ViewModel.SpeakerOn;
+            if (App.ViewModel.SpeakerOn)
+            {
+                sprkButton.IconUri = new Uri("/Images/speaker.png", UriKind.Relative);
+            }
+            else
+            {
+                sprkButton.IconUri = new Uri("/Images/speaker_off.png", UriKind.Relative);
+            }
+            
+        }
+
+        void muteButton_Click(object sender, EventArgs e)
+        {
+            App.ViewModel.MicrophoneOn = !App.ViewModel.MicrophoneOn;
+            if (App.ViewModel.MicrophoneOn)
+            {
+                muteButton.IconUri = new Uri("/Images/microphone.png", UriKind.Relative);
+            }
+            else
+            {
+                muteButton.IconUri = new Uri("/Images/microphone_off.png", UriKind.Relative);
+            }
+        }
+
+        void connectionButton_Click(object sender, EventArgs e)
+        {
+            App.ViewModel.MicrophoneOn = !App.ViewModel.MicrophoneOn;
+            if (App.ViewModel.MicrophoneOn)
+            {
+                connectionButton.IconUri = new Uri("/Images/disconnect.png", UriKind.Relative);
+            }
+            else
+            {
+                connectionButton.IconUri = new Uri("/Images/connect.png", UriKind.Relative);
+            }
+            
+        }
+
 
         private void sndmsg_Tap(object sender, RoutedEventArgs e)
         {
-            ChannelViewItem item = (sender as MenuItem).DataContext as ChannelViewItem;
+            ChannelItem item = (sender as MenuItem).DataContext as ChannelItem;
             if (item.GetType().Equals(typeof(User)))
             {
                 chatTarget.DataContext = null;
@@ -85,7 +158,7 @@ namespace MumbleWP8
             {
                 //setting the focus to different control
                 ChatList.Focus();
-                App.ViewModel.ChatMessages.Add(new ChatMessage(chatbox1.Text, null, chatTarget.DataContext as ChannelViewItem, new Self("ost", 1)));
+                App.ViewModel.ChatMessages.Add(new ChatMessageSent(chatbox1.Text, null, chatTarget.DataContext as ChannelItem));
                 chatbox1.Text = "";
                 ChatList.ScrollTo(App.ViewModel.ChatMessages.Last());
             }

@@ -15,52 +15,47 @@ namespace MumbleWP8.ViewModels
     {
         public MainViewModel()
         {
-            Favorites = new ObservableCollection<ServerViewItem>();
+            Favorites = new ObservableCollection<Server>();
             Channels = new ObservableCollection<Channel>();
             ChatMessages = new ObservableCollection<ChatMessage>();
-            EUList = new List<PublicServerViewItem>();
-            OCList = new List<PublicServerViewItem>();
-            SAList = new List<PublicServerViewItem>();
-            NAList = new List<PublicServerViewItem>();
-            ASList = new List<PublicServerViewItem>();
+            EUList = new List<PublicServer>();
+            OCList = new List<PublicServer>();
+            SAList = new List<PublicServer>();
+            NAList = new List<PublicServer>();
+            ASList = new List<PublicServer>();
         }
 
-        public List<KeyedList<string, PublicServerViewItem>> GroupedCountries(List<PublicServerViewItem> list22)
+        public List<KeyedList<string, PublicServer>> GroupedCountries(List<PublicServer> publicServers)
         {
+            var groupedServers =
+                from server in publicServers
+                orderby server.CountryCode
+                group server by server.CountryCode into serversByCountry
+                select new KeyedList<string, PublicServer>(serversByCountry);
 
-            var photos = list22;
-
-            var groupedPhotos =
-                from photo in photos
-                orderby photo.Country_code
-                group photo by photo.Country_code into photosByMonth
-                select new KeyedList<string, PublicServerViewItem>(photosByMonth);
-
-            return new List<KeyedList<string, PublicServerViewItem>>(groupedPhotos);
+            return new List<KeyedList<string, PublicServer>>(groupedServers);
         }
 
-        /// <summary>
-        /// A collection for ItemViewModel objects.
-        /// </summary>
-        public ObservableCollection<ServerViewItem> Favorites
+
+        public ObservableCollection<Server> Favorites
         {
             get
             {
-                ObservableCollection<ServerViewItem> searchedValue;
-                if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<ObservableCollection<ServerViewItem>>("favorites", out searchedValue))
+                ObservableCollection<Server> searchedValue;
+                if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<ObservableCollection<Server>>("favorites", out searchedValue))
                 {
                     return searchedValue;
                 }
                 else
                 {
-                    IsolatedStorageSettings.ApplicationSettings["favorites"] = new ObservableCollection<ServerViewItem>();
-                    return (ObservableCollection<ServerViewItem>)IsolatedStorageSettings.ApplicationSettings["favorites"];
+                    IsolatedStorageSettings.ApplicationSettings["favorites"] = new ObservableCollection<Server>();
+                    return (ObservableCollection<Server>)IsolatedStorageSettings.ApplicationSettings["favorites"];
                 }
             }
             set
             {
-                ObservableCollection<ServerViewItem> searchedValue;
-                if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<ObservableCollection<ServerViewItem>>("favorites", out searchedValue))
+                ObservableCollection<Server> searchedValue;
+                if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<ObservableCollection<Server>>("favorites", out searchedValue))
                 {
                     IsolatedStorageSettings.ApplicationSettings["favorites"] = value;
                 }
@@ -74,10 +69,7 @@ namespace MumbleWP8.ViewModels
         }
         
         public ObservableCollection<Channel> Channels { get; set; }
-
-        public ObservableCollection<ChatMessage> ChatMessages { get; set; }
-
-        public ObservableCollection<ChannelViewItem> ChannelFlat
+        public ObservableCollection<ChannelItem> ChannelFlat
         {
             get
             {
@@ -85,23 +77,26 @@ namespace MumbleWP8.ViewModels
             }
         }
 
-        public List<PublicServerViewItem> EUList { get; set; }
-        public List<PublicServerViewItem> OCList { get; set; }
-        public List<PublicServerViewItem> SAList { get; set; }
-        public List<PublicServerViewItem> NAList { get; set; }
-        public List<PublicServerViewItem> ASList { get; set; }
+        public ObservableCollection<ChatMessage> ChatMessages { get; set; }
 
-        public List<KeyedList<string, PublicServerViewItem>> EUListGrouped { get { return GroupedCountries(EUList); } }
-        public List<KeyedList<string, PublicServerViewItem>> OCListGrouped { get { return GroupedCountries(OCList); } }
-        public List<KeyedList<string, PublicServerViewItem>> SAListGrouped { get { return GroupedCountries(SAList); } }
-        public List<KeyedList<string, PublicServerViewItem>> NAListGrouped { get { return GroupedCountries(NAList); } }
-        public List<KeyedList<string, PublicServerViewItem>> ASListGrouped { get { return GroupedCountries(ASList); } }
+        
 
-        ObservableCollection<ChannelViewItem> _chanListFlat  = new ObservableCollection<ChannelViewItem>();
+        public List<PublicServer> EUList { get; set; }
+        public List<PublicServer> OCList { get; set; }
+        public List<PublicServer> SAList { get; set; }
+        public List<PublicServer> NAList { get; set; }
+        public List<PublicServer> ASList { get; set; }
+
+        public List<KeyedList<string, PublicServer>> EUListGrouped { get { return GroupedCountries(EUList); } }
+        public List<KeyedList<string, PublicServer>> OCListGrouped { get { return GroupedCountries(OCList); } }
+        public List<KeyedList<string, PublicServer>> SAListGrouped { get { return GroupedCountries(SAList); } }
+        public List<KeyedList<string, PublicServer>> NAListGrouped { get { return GroupedCountries(NAList); } }
+        public List<KeyedList<string, PublicServer>> ASListGrouped { get { return GroupedCountries(ASList); } }
+
+        ObservableCollection<ChannelItem> _chanListFlat  = new ObservableCollection<ChannelItem>();
         //Show album pictures as a tree 
-        ObservableCollection<ChannelViewItem> FlattenChannels(ObservableCollection<Channel> channels)
-        {
-            
+        ObservableCollection<ChannelItem> FlattenChannels(ObservableCollection<Channel> channels)
+        {      
             foreach(Channel chan in channels)
             {
                 _chanListFlat.Add(chan);
@@ -118,28 +113,79 @@ namespace MumbleWP8.ViewModels
                 }
             }
             return _chanListFlat;
-        } 
+        }
 
-        private string _sampleProperty = "Sample Runtime Property Value";
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding
-        /// </summary>
-        /// <returns></returns>
-        public string SampleProperty
+        public double SilenceThreshold { get { return _silenceSlider > _speechSlider ? _speechSlider : _silenceSlider; } }
+        public double SpeechThreshold { get { return _speechSlider; } }
+
+        private double _speechSlider = 0.8;
+        public double SpeechSlider
         {
             get
             {
-                return _sampleProperty;
+                return _speechSlider;
             }
             set
             {
-                if (value != _sampleProperty)
+                if (value != _speechSlider)
                 {
-                    _sampleProperty = value;
-                    NotifyPropertyChanged("SampleProperty");
+                    _speechSlider = value;
+                    NotifyPropertyChanged("SpeechSlider");
                 }
             }
         }
+
+        private double _silenceSlider = 0.6;
+        public double SilenceSlider
+        {
+            get
+            {
+                return _silenceSlider;
+            }
+            set
+            {
+                if (value != _silenceSlider)
+                {
+                    _silenceSlider = value;
+                    NotifyPropertyChanged("SilenceSlider");
+                }
+            }
+        }
+
+        private bool _microphoneOn = true;
+        public bool MicrophoneOn
+        {
+            get
+            {
+                return _microphoneOn;
+            }
+            set
+            {
+                if (value != _microphoneOn)
+                {
+                    _microphoneOn = value;
+                    NotifyPropertyChanged("MicrophoneOn");
+                }
+            }
+        }
+        
+        private bool _speakerOn = true;
+        public bool SpeakerOn
+        {
+            get
+            {
+                return _speakerOn;
+            }
+            set
+            {
+                if (value != _speakerOn)
+                {
+                    _speakerOn = value;
+                    NotifyPropertyChanged("SpeakerOn");
+                }
+            }
+        }
+
 
         /// <summary>
         /// Sample property that returns a localized string
@@ -158,9 +204,6 @@ namespace MumbleWP8.ViewModels
             private set;
         }
 
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
         public void LoadData()
         {
             App.ViewModel.Channels = new ObservableCollection<Channel>();
@@ -179,9 +222,9 @@ namespace MumbleWP8.ViewModels
             subchanneltest[0].users.Add(new User("testuser4", 2) { state = User.States.Talking });
 
             App.ViewModel.ChatMessages = new ObservableCollection<ChatMessage>();
-            App.ViewModel.ChatMessages.Add(new ChatMessage("test msg1", null, subchanneltest[0].users[0], subchanneltest[0].users[1]));
-            App.ViewModel.ChatMessages.Add(new ChatMessage("test msg2", null, subchanneltest[0], subchanneltest[0].users[2]));
-            App.ViewModel.ChatMessages.Add(new ChatMessage("test msg3", null, App.ViewModel.Channels[0], subchanneltest[0]));
+            App.ViewModel.ChatMessages.Add(new ChatMessageReceived("test msg1", null, subchanneltest[0].users[0]));
+            App.ViewModel.ChatMessages.Add(new ChatMessageSent("test msg2", null, subchanneltest[0]));
+            App.ViewModel.ChatMessages.Add(new ChatMessageSent("test msg3", null, App.ViewModel.Channels[0]));
 
             this.IsDataLoaded = true;
         }
@@ -197,75 +240,63 @@ namespace MumbleWP8.ViewModels
         }
     }
 
-
-
-    public class ChatMessage
+    public abstract class ChatMessage
     {
-        public ChannelViewItem Target { get; set; }
+        public ChannelItem Selected { get; set; }
         public string Text { get; set; }
         public string Image { get; set; }
-        public ChannelViewItem Orig { get; set; }
 
-        public string ChatString
-        {
-            get
-            {
-                //Outgoing message
-                if (Orig.GetType().Equals(typeof(MumbleWP8.ViewModels.Self)))
-                {
-                    return "To " + Target.Label + ":";
-                }
-                else
-                {
-                    return "From " + Orig.Label + ":";
-                }
-                
-                
-            }
-        }
+        public string ChatString;
+        public TextAlignment Alignment;
+        public HorizontalAlignment Alignment2;
+        public int LabelRow;
+        public ChatBubbleDirection Direction;
 
-        public TextAlignment Alignment
-        {
-            get
-            {
-                return Orig.GetType().Equals(typeof(MumbleWP8.ViewModels.Self)) ? TextAlignment.Left : TextAlignment.Right;
-            }
-        }
-
-        public HorizontalAlignment Alignment2
-        {
-            get
-            {
-                return Orig.GetType().Equals(typeof(MumbleWP8.ViewModels.Self)) ? HorizontalAlignment.Right : HorizontalAlignment.Left;
-            }
-        }
-
-        public int LabelRow
-        {
-            get
-            {
-                return Orig.GetType().Equals(typeof(MumbleWP8.ViewModels.Self)) ? 2 : 0;
-            }
-        }
-
-        public ChatBubbleDirection Direction
-        {
-            get
-            {
-                return Orig.GetType().Equals(typeof(MumbleWP8.ViewModels.Self)) ? ChatBubbleDirection.LowerRight : ChatBubbleDirection.UpperLeft ;
-            }
-        }
-
-        public ChatMessage(string text, string image, ChannelViewItem target, ChannelViewItem org)
+        public ChatMessage(string text, string image, ChannelItem selected)
         {
             Text = text;
             Image = image;
-            Orig = org;
-            Target = target;
+            Selected = selected;
         }
     }
+    public class ChatMessageReceived : ChatMessage
+    {
+        public new string ChatString
+        {
+            get
+            {
+                return "From " + Selected.Label + ":";
+            }
+        }
 
-    public class ServerViewItem
+        public new TextAlignment Alignment { get { return TextAlignment.Left; } }
+        public new HorizontalAlignment Alignment2 { get { return HorizontalAlignment.Left; } }
+        public new int LabelRow { get { return 0; } }
+        public new ChatBubbleDirection Direction { get { return ChatBubbleDirection.UpperLeft; } }
+
+        public ChatMessageReceived(string text, string image, ChannelItem selection) : base(text, image, selection) { }
+        public ChatMessageReceived() : base("", "", new Channel()) {}
+    }
+    public class ChatMessageSent : ChatMessage
+    {
+        public new string ChatString
+        {
+            get
+            {
+                return "To " + Selected.Label + ":";
+            }
+        }
+
+        public new TextAlignment Alignment { get { return TextAlignment.Right; } }
+        public new HorizontalAlignment Alignment2 { get { return HorizontalAlignment.Right; } }
+        public new int LabelRow { get { return 2; } }
+        public new ChatBubbleDirection Direction { get { return ChatBubbleDirection.LowerRight; } }
+
+        public ChatMessageSent(string text, string image, ChannelItem selection) : base(text, image, selection) { }
+        public ChatMessageSent() : base("", "", new Channel()) { }
+    }
+
+    public class Server
     {
         public string Name { get; set; }
         public string Address { get; set; }
@@ -280,17 +311,16 @@ namespace MumbleWP8.ViewModels
             get { return string.Concat(CurrentUsers, "/", MaxUsers); }
         }
     }
-
-    public class PublicServerViewItem : ServerViewItem
+    public class PublicServer : Server
     {
-        public string Continent_code;
-        public string Country_code;
+        public string ContinentCode;
+        public string CountryCode;
         public string Country;
         public string Region;
         public string URL;
     }
 
-    public abstract class ChannelViewItem
+    public abstract class ChannelItem
     {
         public string Label { get; set; }
         public string Icon { get; set; }
@@ -298,12 +328,16 @@ namespace MumbleWP8.ViewModels
         public Thickness Indent { get { return new Thickness(Level * 20, 0, 0, 0); } }
         public List<MenuItem> ContextItems { get; set; }
     }
-
-    public class Channel : ChannelViewItem
+    public class Channel : ChannelItem
     {
         public ObservableCollection<Channel> subchannels;
         public ObservableCollection<User> users;
-        
+
+        public Channel()
+        {
+            Icon = "Icons/channel.png";
+            ContextItems = new List<MenuItem>() { new MenuItem() { Header = "send message..." } };
+        }
 
         public Channel(string name, int level)
         {
@@ -314,12 +348,14 @@ namespace MumbleWP8.ViewModels
         }
 
     }
-
-    public class User : ChannelViewItem
+    public class User : ChannelItem
     {
         public enum States { NotTalking, Talking };
 
-        
+        public User()
+        {
+
+        }
 
         public States state;
         public new string Icon
@@ -342,12 +378,10 @@ namespace MumbleWP8.ViewModels
         {
             Level = level;
             Label = name;
-            MenuItem sndmsg = new MenuItem() { Header = "send message..." };
-            ContextItems = new List<MenuItem>() { sndmsg, new MenuItem() { Header = "mute user" } };
+            ContextItems = new List<MenuItem>() { new MenuItem() { Header = "send message..." }, new MenuItem() { Header = "mute user" } };
         }
     }
-
-    public class Self : ChannelViewItem
+    public class Self : ChannelItem
     {
         public enum States { NotTalking, Talking };
         public States state;

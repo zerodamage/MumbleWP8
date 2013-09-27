@@ -16,9 +16,7 @@ namespace MumbleWP8
     public partial class EditServer : PhoneApplicationPage
     {
         bool editing;
-
-
-        ServerViewItem item = new ServerViewItem();
+        Server item = new Server();
 
         public EditServer()
         {

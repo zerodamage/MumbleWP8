@@ -44,17 +44,17 @@
                             <Controls:SuperSlider.Background>
                                 <LinearGradientBrush  EndPoint="1,0">
                                     <GradientStop Offset="0" Color="Red"/>
-                                    <GradientStop x:Name="Silence1" Offset="0.6" Color="Red"/>
-                                    <GradientStop x:Name="Silence2" Offset="0.6" Color="Gold"/>
-                                    <GradientStop x:Name="Speech1" Offset="0.8" Color="Gold"/>
-                                    <GradientStop x:Name="Speech2" Offset="0.8" Color="ForestGreen"/>
+                                    <GradientStop x:Name="Silence1" Offset="{Binding SilenceThreshold, Mode=TwoWay}" Color="Red"/>
+                                    <GradientStop x:Name="Silence2" Offset="{Binding SilenceThreshold, Mode=TwoWay}" Color="Gold"/>
+                                    <GradientStop x:Name="Speech1" Offset="{Binding SpeechThreshold, Mode=TwoWay}" Color="Gold"/>
+                                    <GradientStop x:Name="Speech2" Offset="{Binding SpeechThreshold, Mode=TwoWay}" Color="ForestGreen"/>
                                 </LinearGradientBrush>
                             </Controls:SuperSlider.Background>
                         </Controls:SuperSlider>
                         <TextBlock Text="Silence below" />
-                        <Slider x:Name="SilenceSlider" Margin="0,0,0,-30" Foreground="Red" ValueChanged="Slider_ValueChanged" Value="60" Maximum="100" />
+                        <Slider x:Name="SilenceSlider" Margin="0,0,0,-30" Foreground="Red" ValueChanged="Slider_SlienceThres" Value="60" Maximum="100" />
                         <TextBlock Text="Speech above" />
-                        <Slider x:Name="SpeechSlider" Margin="0,-30,0,0" Foreground="Green" RenderTransformOrigin="0.5,0.5" Height="87" Value="20" Maximum="100" ValueChanged="Slider_ValueChanged_1">
+                        <Slider x:Name="SpeechSlider" Margin="0,-30,0,0" Foreground="Green" RenderTransformOrigin="0.5,0.5" Height="87" Value="20" Maximum="100" ValueChanged="Slider_SpeechThres">
                             <Slider.RenderTransform>
                                 <CompositeTransform Rotation="180"/>
                             </Slider.RenderTransform>
@@ -104,7 +104,7 @@
                    <TextBlock Text="Force TCP mode" />
                    <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
                    <TextBlock Text="Certificates" />
-                    <Button Content="Manage certificates" Click="Button_Click"/>
+                    <Button Content="Manage certificates" Click="Button_Certificates_Click"/>
                 </StackPanel>
             </phone:PivotItem>
         </phone:Pivot>

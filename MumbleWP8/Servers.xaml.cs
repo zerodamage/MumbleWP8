@@ -22,9 +22,16 @@ namespace MumbleWP8
 
             InitializeComponent();
 
-            WebClient wc = new WebClient();
-            wc.DownloadStringCompleted += HttpCompleted;
-            wc.DownloadStringAsync(new Uri("http://mumble.info/list2.cgi"));
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.DownloadStringCompleted += HttpCompleted;
+                wc.DownloadStringAsync(new Uri("http://mumble.info/list2.cgi"));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
             DataContext = App.ViewModel;
         }
@@ -35,23 +42,23 @@ namespace MumbleWP8
             {
                 XDocument xdoc = XDocument.Parse(e.Result, LoadOptions.None);
 
-                List<XElement> ost = xdoc.Root.Elements().ToList();
+                List<PublicServer> vList = (from XElement xele in xdoc.Root.Elements()
+                                            select new PublicServer
+                                            {
+                                                Name = xele.Attribute("name").Value.Trim(" ".ToCharArray()),
+                                                Port = int.Parse(xele.Attribute("port").Value),
+                                                Address = xele.Attribute("ip").Value.ToString(),
+                                                ContinentCode = xele.Attribute("continent_code") == null ? null : xele.Attribute("continent_code").Value,
+                                                CountryCode = xele.Attribute("country_code") == null ? null : xele.Attribute("country_code").Value,
+                                                Country = xele.Attribute("country") == null ? null : xele.Attribute("country").Value,
+                                                Region = xele.Attribute("region") == null ? null : xele.Attribute("region").Value
+                                            }).ToList();
 
-                List<PublicServerViewItem> vList = (from XElement xele in xdoc.Root.Elements()
-                         select new PublicServerViewItem
-                         {
-                             Name = xele.Attribute("name").Value.Trim(" ".ToCharArray()),
-                             Port = int.Parse(xele.Attribute("port").Value),
-                             Continent_code = xele.Attribute("continent_code") == null ? null : xele.Attribute("continent_code").Value,
-                             Country_code = xele.Attribute("country_code") == null ? null : xele.Attribute("country_code").Value,
-                             Address = xele.Attribute("ip").Value.ToString()
-                         }).ToList();
-
-                App.ViewModel.EUList = vList.FindAll(test => test.Continent_code == "EU").ToList();
-                App.ViewModel.OCList = vList.FindAll(test => test.Continent_code == "OC").ToList();
-                App.ViewModel.SAList = vList.FindAll(test => test.Continent_code == "SA").ToList();
-                App.ViewModel.NAList = vList.FindAll(test => test.Continent_code == "NA").ToList();
-                App.ViewModel.ASList = vList.FindAll(test => test.Continent_code == "AS").ToList();
+                App.ViewModel.EUList = vList.FindAll(test => test.ContinentCode == "EU").ToList();
+                App.ViewModel.OCList = vList.FindAll(test => test.ContinentCode == "OC").ToList();
+                App.ViewModel.SAList = vList.FindAll(test => test.ContinentCode == "SA").ToList();
+                App.ViewModel.NAList = vList.FindAll(test => test.ContinentCode == "NA").ToList();
+                App.ViewModel.ASList = vList.FindAll(test => test.ContinentCode == "AS").ToList();
             }
 
             DataContext = null;
@@ -99,20 +106,20 @@ namespace MumbleWP8
 
         private void ServerDelete(object sender, RoutedEventArgs e)
         {
-            ServerViewItem selectedServer = (sender as MenuItem).DataContext as ServerViewItem;
+            Server selectedServer = (sender as MenuItem).DataContext as Server;
             App.ViewModel.Favorites.Remove(selectedServer);
         }
 
         private void ServerEdit(object sender, RoutedEventArgs e)
         {
-            ServerViewItem selectedServer = (sender as MenuItem).DataContext as ServerViewItem;
+            Server selectedServer = (sender as MenuItem).DataContext as Server;
 
             NavigationService.Navigate(new Uri("/EditServer.xaml?existingindex=" + App.ViewModel.Favorites.IndexOf(selectedServer), UriKind.Relative));
         }
 
         private void favList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            ServerViewItem item = ((FrameworkElement)e.OriginalSource).DataContext as ServerViewItem;
+            Server item = ((FrameworkElement)e.OriginalSource).DataContext as Server;
             if(item != null)
             {
                 //TODO: Connect to server here

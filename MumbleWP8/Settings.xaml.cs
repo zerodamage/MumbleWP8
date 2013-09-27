@@ -17,42 +17,36 @@ namespace MumbleWP8
         public Settings()
         {
             InitializeComponent();
+
+            preview.DataContext = App.ViewModel;
         }
 
-        double SilenceThreshold;
-        double SilenceThresReal;
-        double SpeechThreshold;
 
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+
+        private void Slider_SlienceThres(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            SilenceThresReal = (e.NewValue) / 100;
-            UpdateSlider();
-        }
+            App.ViewModel.SilenceSlider = (e.NewValue) / 100;
+            UpdatePreview();
 
-        private void UpdateSlider()
-        {
-            if (Silence1 != null && Silence2 != null && Speech1 != null && Speech2 != null)
-            {
-                if (SilenceThresReal > SpeechThreshold)
-                {
-                    SilenceThreshold = SpeechThreshold;
-                }
-                else
-                {
-                    SilenceThreshold = SilenceThresReal;
-                }
-
-                Silence1.Offset = SilenceThreshold;
-                Silence2.Offset = SilenceThreshold;
-                Speech1.Offset = SpeechThreshold;
-                Speech2.Offset = SpeechThreshold;
-            }
         }
         
-        private void Slider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void Slider_SpeechThres(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            SpeechThreshold = (100 - e.NewValue) / 100;
-            UpdateSlider();
+            App.ViewModel.SpeechSlider = (100 - e.NewValue) / 100;
+            UpdatePreview();
+        }
+
+        private void UpdatePreview()
+        {
+            double ost = App.ViewModel.SpeechThreshold;
+            double ost2 = App.ViewModel.SilenceThreshold;
+            if (preview != null)
+            {
+                Silence1.Offset = ost2;
+                Silence2.Offset = ost2;
+                Speech1.Offset = ost;
+                Speech2.Offset = ost;
+            }
         }
 
         private void ListPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -69,10 +63,6 @@ namespace MumbleWP8
             {
                 ContActivated.Visibility = ((e.AddedItems[0] as ListPickerItem).Content.ToString() == "Continuous") ? Visibility.Visible : Visibility.Collapsed;
             }
-
-            
-            
-            //.AddedItems[0] == "Push-to-talk"
         }
 
         private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)
@@ -86,7 +76,7 @@ namespace MumbleWP8
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Certificates_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Certificates.xaml", UriKind.Relative));
         }
