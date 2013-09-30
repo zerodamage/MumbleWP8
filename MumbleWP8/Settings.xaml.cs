@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using Microsoft.Phone.Controls;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 
 namespace MumbleWP8
 {
@@ -23,37 +19,17 @@ namespace MumbleWP8
 
 
 
-        private void SliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            UpdatePreview();
-
-        }
-
-        private void UpdatePreview()
-        {
-            double ost = App.ViewModel.SpeechThreshold;
-            double ost2 = App.ViewModel.SilenceThreshold;
-            if (preview != null)
-            {
-                Silence1.Offset = ost2;
-                Silence2.Offset = ost2;
-                Speech1.Offset = ost;
-                Speech2.Offset = ost;
-            }
-        }
 
         private void ListPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 1 && VoiceActivated != null && PushActivated != null && ContActivated != null)
             {
-                App.ViewModel.ActivationType = (MumbleWP8.ViewModels.MainViewModel.Activation)e.AddedItems[0];
+                App.ViewModel.ActivationType = (string)e.AddedItems[0];
 
-                VoiceActivated.Visibility = (App.ViewModel.ActivationType == MumbleWP8.ViewModels.MainViewModel.Activation.voice) ? Visibility.Visible : Visibility.Collapsed; 
-                PushActivated.Visibility = (App.ViewModel.ActivationType == MumbleWP8.ViewModels.MainViewModel.Activation.Pushtospeak) ? Visibility.Visible : Visibility.Collapsed;
-                ContActivated.Visibility = (App.ViewModel.ActivationType == MumbleWP8.ViewModels.MainViewModel.Activation.continous) ? Visibility.Visible : Visibility.Collapsed;
+                VoiceActivated.Visibility = App.ViewModel.ActivationType.Equals("Voice activation") ? Visibility.Visible : Visibility.Collapsed;
+                PushActivated.Visibility = App.ViewModel.ActivationType.Equals("Push-to-talk") ? Visibility.Visible : Visibility.Collapsed;
+                ContActivated.Visibility = App.ViewModel.ActivationType.Equals("Continously") ? Visibility.Visible : Visibility.Collapsed;
             }
-            
-            
         }
 
         private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)
@@ -70,6 +46,23 @@ namespace MumbleWP8
         private void Button_Certificates_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Certificates.xaml", UriKind.Relative));
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Silence1.Offset = App.ViewModel.SilenceThreshold;
+            Silence2.Offset = App.ViewModel.SilenceThreshold;
+            
+            Speech1.Offset = App.ViewModel.SpeechThreshold;
+            Speech2.Offset = App.ViewModel.SpeechThreshold;
+        }
+
+        private void ListPicker2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 1)
+            {
+                App.ViewModel.VoiceActivationMethod = (string)e.AddedItems[0];
+            }
         }
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System.Xml.Linq;
-using System.IO.IsolatedStorage;
 using MumbleWP8.ViewModels;
+using System;
 using System.Threading;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace MumbleWP8
 {
@@ -32,7 +26,7 @@ namespace MumbleWP8
 
         }
 
-        ApplicationBarIconButton button1;
+        ApplicationBarIconButton favAddButton;
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
@@ -46,19 +40,18 @@ namespace MumbleWP8
 
             ApplicationBar = new ApplicationBar();
 
-            button1 = new ApplicationBarIconButton();
-            button1.IconUri = new Uri("/Images/favs.addto.png", UriKind.Relative);
-            button1.Text = "connect";
-            ApplicationBar.Buttons.Add(button1);
-            button1.Click += new EventHandler(ApplicationBarIconButton_Click);
+            favAddButton = new ApplicationBarIconButton();
+            favAddButton.IconUri = new Uri("/Images/favs.addto.png", UriKind.Relative);
+            favAddButton.Text = "connect";
+            ApplicationBar.Buttons.Add(favAddButton);
+            favAddButton.Click += new EventHandler(ApplicationBarIconButton_Click);
 
-            ApplicationBarMenuItem menuItem1 = new ApplicationBarMenuItem();
-            menuItem1.Text = "settings...";
-            ApplicationBar.MenuItems.Add(menuItem1);
-            menuItem1.Click += new EventHandler(ApplicationBarMenuItem_Click);
+            ApplicationBarMenuItem settingsMenuItem = new ApplicationBarMenuItem();
+            settingsMenuItem.Text = "settings...";
+            ApplicationBar.MenuItems.Add(settingsMenuItem);
+            settingsMenuItem.Click += new EventHandler(SettingsBarMenuItem_Click);
 
             App.ViewModel.LoadPublicServers();
-            Thread.Sleep(1000);
             DataContext = App.ViewModel;
         }
 
@@ -75,7 +68,7 @@ namespace MumbleWP8
             NavigationService.Navigate(new Uri("/EditServer.xaml?existingindex=" + App.ViewModel.Favorites.IndexOf(selectedServer), UriKind.Relative));
         }
 
-        private void favList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void FavList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             Server item = ((FrameworkElement)e.OriginalSource).DataContext as Server;
             if(item != null)
@@ -85,7 +78,7 @@ namespace MumbleWP8
             }
         }
 
-        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
+        private void SettingsBarMenuItem_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative));
         }
@@ -95,11 +88,12 @@ namespace MumbleWP8
         {
             if (e.Item == pivotItem1)
             {
-                button1.IsEnabled = true;
+                favAddButton.IsEnabled = true;
+                //Favorites tabs
             }
             else
             {
-                button1.IsEnabled = false;
+                favAddButton.IsEnabled = false;
                 //Public tabs
             }
         }

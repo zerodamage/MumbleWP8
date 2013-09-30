@@ -26,10 +26,7 @@
                     </toolkit:ListPicker>
                     <StackPanel Margin="13" x:Name="VoiceActivated" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="400">
                         <TextBlock HorizontalAlignment="Left" Text="Method" />
-                        <toolkit:ListPicker SelectedIndex="{Binding VoiceActivationMethod, Mode=TwoWay, FallbackValue=0}">
-                            <toolkit:ListPickerItem Content="Amplitude" />
-                            <toolkit:ListPickerItem Content="Signal to noise" />
-                        </toolkit:ListPicker>
+                        <toolkit:ListPicker ItemsSource="{Binding VoiceActivationMethods}" SelectionChanged="ListPicker2_SelectionChanged"/>
                         <TextBlock Text="Preview" />
                         <Controls:SuperSlider x:Name="preview"  Margin="10,10,10,-20"
 	                        Title="Slider with thumb, custom sizing and &quot;flair&quot;"
@@ -41,17 +38,17 @@
                             <Controls:SuperSlider.Background>
                                 <LinearGradientBrush  EndPoint="1,0">
                                     <GradientStop Offset="0" Color="Red"/>
-                                    <GradientStop x:Name="Silence1" Offset="{Binding SilenceThreshold, Mode=TwoWay}" Color="Red"/>
-                                    <GradientStop x:Name="Silence2" Offset="{Binding SilenceThreshold, Mode=TwoWay}" Color="Gold"/>
-                                    <GradientStop x:Name="Speech1" Offset="{Binding SpeechThreshold, Mode=TwoWay}" Color="Gold"/>
-                                    <GradientStop x:Name="Speech2" Offset="{Binding SpeechThreshold, Mode=TwoWay}" Color="ForestGreen"/>
+                                    <GradientStop x:Name="Silence1" Offset="{Binding SilenceThreshold}" Color="Red"/>
+                                    <GradientStop x:Name="Silence2" Offset="{Binding SilenceThreshold}" Color="Gold"/>
+                                    <GradientStop x:Name="Speech1" Offset="{Binding SpeechThreshold}" Color="Gold"/>
+                                    <GradientStop x:Name="Speech2" Offset="{Binding SpeechThreshold}" Color="ForestGreen"/>
                                 </LinearGradientBrush>
                             </Controls:SuperSlider.Background>
                         </Controls:SuperSlider>
                         <TextBlock Text="Silence below" />
-                        <Slider x:Name="SilenceSlider" Margin="0,0,0,-30" Foreground="Red" Value="{Binding SilenceSlider, Mode=TwoWay}" Maximum="1" SmallChange="0.01" LargeChange="0.01" ValueChanged="SliderChanged" />
+                        <Slider Margin="0,0,0,-30" Foreground="Red" Value="{Binding SilenceSlider, Mode=TwoWay}" Maximum="1" SmallChange="0.01" LargeChange="0.1" ValueChanged="Slider_ValueChanged" />
                         <TextBlock Text="Speech above" />
-                        <Slider x:Name="SpeechSlider" Margin="0,-30,0,0" Foreground="Green" RenderTransformOrigin="0.5,0.5" Height="87" Value="{Binding SpeechSlider, Mode=TwoWay}" Maximum="1" SmallChange="0.01" LargeChange="0.01" ValueChanged="SliderChanged">
+                        <Slider Margin="0,-30,0,0" Foreground="Green" RenderTransformOrigin="0.5,0.5" Height="87" Value="{Binding SpeechSlider, Mode=TwoWay}" Maximum="1" SmallChange="0.01" LargeChange="0.1" ValueChanged="Slider_ValueChanged">
                             <Slider.RenderTransform>
                                 <CompositeTransform Rotation="180"/>
                             </Slider.RenderTransform>

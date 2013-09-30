@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MumbleWP8.ViewModels
 {
@@ -23,7 +19,10 @@ namespace MumbleWP8.ViewModels
                 if (value != GetSetting<double>("speechslider"))
                 {
                     SetSetting<double>("speechslider", value);
+                    
                     NotifyPropertyChanged("SpeechSlider");
+                    NotifyPropertyChanged("SilenceThreshold");
+                    NotifyPropertyChanged("SpeechThreshold");
                 }
             }
         }
@@ -40,47 +39,49 @@ namespace MumbleWP8.ViewModels
                 {
                     SetSetting<double>("silenceslider", value);
                     NotifyPropertyChanged("SilenceSlider");
+                    NotifyPropertyChanged("SilenceThreshold");
+                    NotifyPropertyChanged("SpeechThreshold");
                 }
             }
         }
 
-        public enum Activation { Pushtospeak, Voiceactivated, Continous }
+        public List<string> ActivationTypes { get { return new List<string>() { "Voice activation", "Continously", "Push-to-talk" }; } }
 
-        public IEnumerable<Activation> ActivationTypes { get { return Enum.GetValues(typeof(Activation)).Cast<Activation>(); } }
-
-        public Activation ActivationType
+        public string ActivationType
         {
             get
             {
-                return GetSetting<Activation>("ActivationType");
+                return GetSetting<string>("ActivationType");
             }
             set
             {
-                if (value != GetSetting<Activation>("ActivationType"))
+                if (value != GetSetting<string>("ActivationType"))
                 {
-                    SetSetting<int>("ActivationType", value);
+                    SetSetting<string>("ActivationType", value);
                     NotifyPropertyChanged("ActivationType");
                 }
             }
         }
 
-        public int VoiceActivationMethod
+        public List<string> VoiceActivationMethods { get { return new List<string>() { "Signal-to-noise", "Amplitude" }; } }
+
+        public string VoiceActivationMethod
         {
             get
             {
-                return GetSetting<int>("VoiceActivationMethod");
+                return GetSetting<string>("VoiceActivationMethod");
             }
             set
             {
-                if (value != GetSetting<int>("VoiceActivationMethod"))
+                if (value != GetSetting<string>("VoiceActivationMethod"))
                 {
                     SetSetting<int>("VoiceActivationMethod", value);
-                    NotifyPropertyChanged("SilenceSlider");
+                    NotifyPropertyChanged("VoiceActivationMethod");
                 }
             }
         }
 
-        public T GetSetting<T>(string setting) where T : new()
+        public T GetSetting<T>(string setting)
         {
             T searchedValue;
             if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<T>(setting, out searchedValue))
@@ -89,11 +90,11 @@ namespace MumbleWP8.ViewModels
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings[setting] = new T();
+                IsolatedStorageSettings.ApplicationSettings[setting] = default(T);
                 return (T)IsolatedStorageSettings.ApplicationSettings[setting];
             }
         }
-        public void SetSetting<T>(string setting, dynamic value) where T : new()
+        public void SetSetting<T>(string setting, dynamic value)
         {
             T searchedValue;
             if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<T>(setting, out searchedValue))
@@ -140,6 +141,7 @@ namespace MumbleWP8.ViewModels
                 {
                     _speakerOn = value;
                     NotifyPropertyChanged("SpeakerOn");
+                    
                 }
             }
         }

@@ -86,7 +86,7 @@
         <!--Pivot Control-->
         <phone:Pivot Title="MUMBLE - SERVERS" LoadedPivotItem="Pivot_LoadingPivotItem_1">
             <phone:PivotItem x:Name="pivotItem1" Header="Favorites">
-                <phone:LongListSelector ItemsSource="{Binding Favorites}" ItemTemplate="{StaticResource FavListItemTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tap="favList_Tap" />
+                <phone:LongListSelector ItemsSource="{Binding Favorites}" ItemTemplate="{StaticResource FavListItemTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tap="FavList_Tap" />
             </phone:PivotItem>
             <phone:PivotItem Header="Europe">
                 <phone:LongListSelector ItemsSource="{Binding EUListGrouped}" GroupHeaderTemplate="{StaticResource AddrBookGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource AddrBookJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />

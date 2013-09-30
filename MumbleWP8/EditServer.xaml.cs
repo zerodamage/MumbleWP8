@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using System.Windows.Input;
-using System.IO.IsolatedStorage;
+﻿using Microsoft.Phone.Controls;
 using MumbleWP8.ViewModels;
+using System;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace MumbleWP8
 {

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Collections.Generic;
+﻿using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using MumbleWP8.ViewModels;
+using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Microsoft.Xna.Framework.Media;
-using System.Windows.Media;
-using MumbleWP8.ViewModels;
 using System.Windows.Input;
-using System.Threading;
+using System.Windows.Navigation;
 
 
 namespace MumbleWP8
