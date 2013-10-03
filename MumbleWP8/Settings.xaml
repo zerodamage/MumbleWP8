@@ -22,12 +22,18 @@
             <phone:PivotItem Header="Transmission">
                 <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <TextBlock HorizontalAlignment="Left" Text="Type" Margin="13,0,0,0" />
-                    <toolkit:ListPicker ItemsSource="{Binding ActivationTypes}" SelectionChanged="ListPicker_SelectionChanged">
+                    <toolkit:ListPicker SelectedIndex="{Binding ActivationTypeIndex, Mode=TwoWay, FallbackValue=-1}" SelectionChanged="ListPicker_SelectionChanged">
+                        <toolkit:ListPickerItem Content="Voice activation" />
+                        <toolkit:ListPickerItem Content="Continously" />
+                        <toolkit:ListPickerItem Content="Push-to-speak"/>          
                     </toolkit:ListPicker>
                     <StackPanel Margin="13" x:Name="VoiceActivated" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="400">
                         <TextBlock HorizontalAlignment="Left" Text="Method" />
-                        <toolkit:ListPicker ItemsSource="{Binding VoiceActivationMethods}" SelectionChanged="ListPicker2_SelectionChanged"/>
-                        <TextBlock Text="Preview" />
+                        <toolkit:ListPicker SelectedIndex="{Binding VoiceActivationMethodIndex, Mode=TwoWay, FallbackValue=-1}" SelectionChanged="ListPicker2_SelectionChanged">
+                            <toolkit:ListPickerItem Content="Signal-to-noise" />
+                            <toolkit:ListPickerItem Content="Amplitude" />
+                        </toolkit:ListPicker>
+                                    <TextBlock Text="Preview" />
                         <Controls:SuperSlider x:Name="preview"  Margin="10,10,10,-20"
 	                        Title="Slider with thumb, custom sizing and &quot;flair&quot;"
 	                        BackgroundSize="40"
@@ -68,35 +74,33 @@
                 <ScrollViewer>
                     <StackPanel Margin="10" >
                         <TextBlock  TextWrapping="Wrap" Text="Transmission quality" Grid.Column="0" Grid.Row="0"/>
-                        <toolkit:ListPicker SelectionChanged="ListPicker_SelectionChanged" Grid.Row="0" Grid.Column="1">
-                            <toolkit:ListPickerItem Content="Balance" />
+                        <toolkit:ListPicker SelectedIndex="{Binding TransmissionQualityIndex, Mode=TwoWay, FallbackValue=-1}" SelectionChanged="ListPicker_SelectionChanged" Grid.Row="0" Grid.Column="1">
+                            <toolkit:ListPickerItem Content="Balanced" />
                             <toolkit:ListPickerItem Content="High" />
                             <toolkit:ListPickerItem Content="Low"/>
                         </toolkit:ListPicker>
 
-
-
                         <TextBlock TextWrapping="Wrap" Text="Input preprocessing"/>
-                        <toolkit:ToggleSwitch Margin="0,-25,0,-25"/>
+                        <toolkit:ToggleSwitch IsChecked="{Binding InputPreprocess, Mode=TwoWay}"  Margin="0,-25,0,-25"/>
                         <TextBlock TextWrapping="Wrap" Text="Echo cancellation"/>
-                        <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                        <toolkit:ToggleSwitch IsChecked="{Binding EchoCancellation, Mode=TwoWay}" Margin="0,-25,0,-25" />
                         <TextBlock TextWrapping="Wrap" Text="Speakerphone mode"/>
-                        <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                        <toolkit:ToggleSwitch IsChecked="{Binding SpeakerphoneMode, Mode=TwoWay}" Margin="0,-25,0,-25" />
                         <TextBlock TextWrapping="Wrap" Text="Output sidetone"/>
-                        <toolkit:ToggleSwitch Margin="0,-25,0,-25" Checked="ToggleSwitch_Checked" Unchecked="ToggleSwitch_Unchecked" />
+                        <toolkit:ToggleSwitch IsChecked="{Binding OutputSidetone, Mode=TwoWay}" Margin="0,-25,0,-25" Checked="ToggleSwitch_Checked" Unchecked="ToggleSwitch_Unchecked" />
                         <StackPanel x:Name="Sidetone" Visibility="Collapsed">
                             <TextBlock TextWrapping="Wrap" Text="Sidetone volume"/>
-                            <Slider />
+                            <Slider Value="{Binding SidetoneAmount, Mode=TwoWay}" />
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="Opus Codec: Force CELT mode"/>
-                        <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                        <toolkit:ToggleSwitch IsChecked="{Binding OpusForceCelt, Mode=TwoWay}" Margin="0,-25,0,-25" />
                     </StackPanel>
                 </ScrollViewer>
             </phone:PivotItem>
             <phone:PivotItem Header="Network" >
                 <StackPanel Margin="10">
                     <TextBlock Text="Force TCP mode" />
-                    <toolkit:ToggleSwitch Margin="0,-25,0,-25" />
+                    <toolkit:ToggleSwitch IsChecked="{Binding ForceTCP, Mode=TwoWay, FallbackValue=-1}" Margin="0,-25,0,-25" />
                     <TextBlock Text="Certificates" />
                     <Button Content="Manage certificates" Click="Button_Certificates_Click"/>
                 </StackPanel>

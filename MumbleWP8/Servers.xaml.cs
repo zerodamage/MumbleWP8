@@ -10,27 +10,17 @@ namespace MumbleWP8
 {
     public partial class Servers : PhoneApplicationPage
     {
+        ApplicationBarIconButton favAddButton;
 
         public Servers()
         {
             InitializeComponent();
         }
 
-        private void ApplicationBarIconButton_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/EditServer.xaml", UriKind.Relative));
-        }
-
-        private void ApplicationBarIconButton_Click_2(object sender, EventArgs e)
-        {
-
-        }
-
-        ApplicationBarIconButton favAddButton;
-
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+           
             string edited;
             if (NavigationContext.QueryString.TryGetValue("edit", out edited))
             {
@@ -42,9 +32,9 @@ namespace MumbleWP8
 
             favAddButton = new ApplicationBarIconButton();
             favAddButton.IconUri = new Uri("/Images/favs.addto.png", UriKind.Relative);
-            favAddButton.Text = "connect";
+            favAddButton.Text = "add favorite";
             ApplicationBar.Buttons.Add(favAddButton);
-            favAddButton.Click += new EventHandler(ApplicationBarIconButton_Click);
+            favAddButton.Click += new EventHandler(FavAddBarIconButton_Click);
 
             ApplicationBarMenuItem settingsMenuItem = new ApplicationBarMenuItem();
             settingsMenuItem.Text = "settings...";
@@ -78,23 +68,28 @@ namespace MumbleWP8
             }
         }
 
+        private void FavAddBarIconButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/EditServer.xaml", UriKind.Relative));
+        }
+
         private void SettingsBarMenuItem_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative));
         }
 
 
-        private void Pivot_LoadingPivotItem_1(object sender, PivotItemEventArgs e)
+        private void Pivot_LoadingPivotItem(object sender, PivotItemEventArgs e)
         {
-            if (e.Item == pivotItem1)
+            if (e.Item == favsPivotItem)
             {
-                favAddButton.IsEnabled = true;
                 //Favorites tabs
+                favAddButton.IsEnabled = true;
             }
             else
             {
-                favAddButton.IsEnabled = false;
                 //Public tabs
+                favAddButton.IsEnabled = false;
             }
         }
     }

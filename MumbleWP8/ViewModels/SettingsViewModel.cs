@@ -6,38 +6,17 @@ namespace MumbleWP8.ViewModels
     partial class MainViewModel
     {
         public double SilenceThreshold { get { return SilenceSlider > 1.0 - SpeechSlider ? 1.0 - SpeechSlider : SilenceSlider; } }
-        public double SpeechThreshold { get { return 1.0 - SpeechSlider; } }
-
-        public double SpeechSlider
-        {
-            get
-            {
-                return GetSetting<double>("speechslider");
-            }
-            set
-            {
-                if (value != GetSetting<double>("speechslider"))
-                {
-                    SetSetting<double>("speechslider", value);
-                    
-                    NotifyPropertyChanged("SpeechSlider");
-                    NotifyPropertyChanged("SilenceThreshold");
-                    NotifyPropertyChanged("SpeechThreshold");
-                }
-            }
-        }
-
         public double SilenceSlider
         {
             get
             {
-                return GetSetting<double>("silenceslider");
+                return GetSetting<double>("SilenceSlider");
             }
             set
             {
-                if (value != GetSetting<double>("silenceslider"))
+                if (value != GetSetting<double>("SilenceSlider"))
                 {
-                    SetSetting<double>("silenceslider", value);
+                    SetSetting<double>("SilenceSlider", value);
                     NotifyPropertyChanged("SilenceSlider");
                     NotifyPropertyChanged("SilenceThreshold");
                     NotifyPropertyChanged("SpeechThreshold");
@@ -45,38 +24,205 @@ namespace MumbleWP8.ViewModels
             }
         }
 
-        public List<string> ActivationTypes { get { return new List<string>() { "Voice activation", "Continously", "Push-to-talk" }; } }
-
-        public string ActivationType
+        public double SpeechThreshold { get { return 1.0 - SpeechSlider; } }
+        public double SpeechSlider
         {
             get
             {
-                return GetSetting<string>("ActivationType");
+                return GetSetting<double>("SpeechSlider");
             }
             set
             {
-                if (value != GetSetting<string>("ActivationType"))
+                if (value != GetSetting<double>("SpeechSlider"))
                 {
-                    SetSetting<string>("ActivationType", value);
-                    NotifyPropertyChanged("ActivationType");
+                    SetSetting<double>("SpeechSlider", value);
+                    NotifyPropertyChanged("SpeechSlider");
+                    NotifyPropertyChanged("SilenceThreshold");
+                    NotifyPropertyChanged("SpeechThreshold");
+                }
+            }
+        }
+        
+        public enum ActivationTypes { Voiceactivation, Continously, Pushtospeak };
+        public int ActivationTypeIndex
+        {
+            get
+            {
+                return GetSetting<int>("ActivationTypeIndex");
+            }
+            set
+            {
+                SetSetting<int>("ActivationTypeIndex", value);
+                NotifyPropertyChanged("ActivationTypeIndex");
+            }
+        }
+
+        public enum VoiceActivationMethods { Signaltonoise, Amplitude };
+        public int VoiceActivationMethodIndex
+        {
+            get
+            {
+                return GetSetting<int>("VoiceActivationMethodIndex");
+            }
+            set
+            {
+                if (value != GetSetting<int>("VoiceActivationMethodIndex"))
+                {
+                    SetSetting<int>("VoiceActivationMethodIndex", value);
+                    NotifyPropertyChanged("VoiceActivationMethodIndex");
                 }
             }
         }
 
-        public List<string> VoiceActivationMethods { get { return new List<string>() { "Signal-to-noise", "Amplitude" }; } }
-
-        public string VoiceActivationMethod
+        public bool SpeakerOn
         {
             get
             {
-                return GetSetting<string>("VoiceActivationMethod");
+                return GetSetting<bool>("SpeakerOn");
             }
             set
             {
-                if (value != GetSetting<string>("VoiceActivationMethod"))
+                if (value != GetSetting<bool>("SpeakerOn"))
                 {
-                    SetSetting<int>("VoiceActivationMethod", value);
-                    NotifyPropertyChanged("VoiceActivationMethod");
+                    SetSetting<double>("SpeakerOn", value);
+                    NotifyPropertyChanged("SpeakerOn");
+                }
+            }
+        }
+        public bool MicrophoneOn
+        {
+            get
+            {
+                return GetSetting<bool>("MicrophoneOn");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("MicrophoneOn"))
+                {
+                    SetSetting<double>("MicrophoneOn", value);
+                    NotifyPropertyChanged("MicrophoneOn");
+                }
+            }
+        }
+
+        public int TransmissionQualityIndex
+        {
+            get
+            {
+                return GetSetting<int>("TransmissionQualityIndex");
+            }
+            set
+            {
+                if (value != GetSetting<int>("TransmissionQualityIndex"))
+                {
+                    SetSetting<int>("TransmissionQualityIndex", value);
+                    NotifyPropertyChanged("TransmissionQualityIndex");
+                }
+            }
+        }
+        public bool InputPreprocess
+        {
+            get
+            {
+                return GetSetting<bool>("InputPreprocess");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("InputPreprocess"))
+                {
+                    SetSetting<bool>("InputPreprocess", value);
+                    NotifyPropertyChanged("InputPreprocess");
+                }
+            }
+        }
+        public bool EchoCancellation
+        {
+            get
+            {
+                return GetSetting<bool>("EchoCancellation");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("EchoCancellation"))
+                {
+                    SetSetting<bool>("EchoCancellation", value);
+                    NotifyPropertyChanged("EchoCancellation");
+                }
+            }
+        }
+        public bool SpeakerphoneMode
+        {
+            get
+            {
+                return GetSetting<bool>("SpeakerphoneMode");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("SpeakerphoneMode"))
+                {
+                    SetSetting<bool>("SpeakerphoneMode", value);
+                    NotifyPropertyChanged("SpeakerphoneMode");
+                }
+            }
+        }
+        public bool OutputSidetone
+        {
+            get
+            {
+                return GetSetting<bool>("OutputSidetone");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("OutputSidetone"))
+                {
+                    SetSetting<bool>("OutputSidetone", value);
+                    NotifyPropertyChanged("OutputSidetone");
+                }
+            }
+        }
+        public double SidetoneAmount
+        {
+            get
+            {
+                return GetSetting<double>("SidetoneAmount");
+            }
+            set
+            {
+                if (value != GetSetting<double>("SidetoneAmount"))
+                {
+                    SetSetting<double>("SidetoneAmount", value);
+                    NotifyPropertyChanged("SidetoneAmount");
+                }
+            }
+        }
+        public bool OpusForceCelt
+        {
+            get
+            {
+                return GetSetting<bool>("OpusForceCelt");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("OpusForceCelt"))
+                {
+                    SetSetting<bool>("OpusForceCelt", value);
+                    NotifyPropertyChanged("OpusForceCelt");
+                }
+            }
+        }
+
+        public bool ForceTCP
+        {
+            get
+            {
+                return GetSetting<bool>("ForceTCP");
+            }
+            set
+            {
+                if (value != GetSetting<bool>("ForceTCP"))
+                {
+                    SetSetting<bool>("ForceTCP", value);
+                    NotifyPropertyChanged("ForceTCP");
                 }
             }
         }
@@ -110,40 +256,5 @@ namespace MumbleWP8.ViewModels
         }
 
        
-
-        private bool _microphoneOn = true;
-        public bool MicrophoneOn
-        {
-            get
-            {
-                return _microphoneOn;
-            }
-            set
-            {
-                if (value != _microphoneOn)
-                {
-                    _microphoneOn = value;
-                    NotifyPropertyChanged("MicrophoneOn");
-                }
-            }
-        }
-
-        private bool _speakerOn = true;
-        public bool SpeakerOn
-        {
-            get
-            {
-                return _speakerOn;
-            }
-            set
-            {
-                if (value != _speakerOn)
-                {
-                    _speakerOn = value;
-                    NotifyPropertyChanged("SpeakerOn");
-                    
-                }
-            }
-        }
     }
 }

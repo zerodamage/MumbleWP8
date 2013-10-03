@@ -161,10 +161,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icons\channel.png" />
-    <Content Include="Icons\channel_active.png" />
-    <Content Include="Icons\talking_off.png" />
-    <Content Include="Icons\talking_on.png" />
+    <Content Include="MumbleIcons\channel.png" />
+    <Content Include="MumbleIcons\channel_active.png" />
+    <Content Include="MumbleIcons\talking_off.png" />
+    <Content Include="MumbleIcons\talking_on.png" />
     <Content Include="Images\achievements.png" />
     <Content Include="Images\activate.png" />
     <Content Include="Images\add.png" />
@@ -305,13 +305,12 @@
     <Content Include="Images\wifi.4.png" />
     <Content Include="Images\wifi.5.png" />
     <Content Include="Images\Windows Phone 8 Application Bar Icons.png" />
-    <Content Include="README_FIRST.txt" />
     <Content Include="SplashScreenImage.jpg" />
-    <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
+    <Content Include="Images\ApplicationBar.Add.png" />
+    <Content Include="Images\ApplicationBar.Cancel.png" />
+    <Content Include="Images\ApplicationBar.Check.png" />
+    <Content Include="Images\ApplicationBar.Delete.png" />
+    <Content Include="Images\ApplicationBar.Select.png" />
     <Resource Include="Assets\PanoramaBackground.png" />
     <Content Include="Assets\AlignmentGrid.png" />
     <Content Include="Assets\ApplicationIcon.png">

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Phone.Controls;
+using MumbleWP8.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,29 +7,42 @@ using System.Windows.Navigation;
 
 namespace MumbleWP8
 {
-    
-
     public partial class Settings : PhoneApplicationPage
     {
         public Settings()
         {
             InitializeComponent();
-
-            DataContext = App.ViewModel;
         }
 
-
-
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            DataContext = App.ViewModel;
+            //ActivationType.SelectedIndex = App.ViewModel.ActivationTypeIndex;
+            //VoiceActivationMethod.SelectedIndex = App.ViewModel.VoiceActivationMethodIndex;
+        }
 
         private void ListPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 1 && VoiceActivated != null && PushActivated != null && ContActivated != null)
             {
-                App.ViewModel.ActivationType = (string)e.AddedItems[0];
+                switch(((ListPickerItem)e.AddedItems[0]).Content.ToString())
+                {
+                    case "Voice activation":
+                        App.ViewModel.ActivationTypeIndex = 0;
+                        break;
+                    case "Continously":
+                        App.ViewModel.ActivationTypeIndex = 1;
+                        break;
 
-                VoiceActivated.Visibility = App.ViewModel.ActivationType.Equals("Voice activation") ? Visibility.Visible : Visibility.Collapsed;
-                PushActivated.Visibility = App.ViewModel.ActivationType.Equals("Push-to-talk") ? Visibility.Visible : Visibility.Collapsed;
-                ContActivated.Visibility = App.ViewModel.ActivationType.Equals("Continously") ? Visibility.Visible : Visibility.Collapsed;
+                    case "Push-to-speak":
+                        App.ViewModel.ActivationTypeIndex = 2;
+                        break;
+                }
+                
+                VoiceActivated.Visibility = App.ViewModel.ActivationTypeIndex == 0 ? Visibility.Visible : Visibility.Collapsed;
+                ContActivated.Visibility = App.ViewModel.ActivationTypeIndex == 1 ? Visibility.Visible : Visibility.Collapsed;
+                PushActivated.Visibility = App.ViewModel.ActivationTypeIndex == 2 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -40,7 +54,6 @@ namespace MumbleWP8
         private void ToggleSwitch_Unchecked(object sender, RoutedEventArgs e)
         {
             Sidetone.Visibility = System.Windows.Visibility.Collapsed;
-
         }
 
         private void Button_Certificates_Click(object sender, RoutedEventArgs e)
@@ -59,9 +72,17 @@ namespace MumbleWP8
 
         private void ListPicker2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count == 1)
+            if (e.AddedItems.Count == 1 && VoiceActivated != null)
             {
-                App.ViewModel.VoiceActivationMethod = (string)e.AddedItems[0];
+                switch (((ListPickerItem)e.AddedItems[0]).Content.ToString())
+                {
+                    case "Signal-to-noise":
+                        App.ViewModel.VoiceActivationMethodIndex = 0;
+                        break;
+                    case "Amplitude":
+                        App.ViewModel.VoiceActivationMethodIndex = 1;
+                        break;
+                }
             }
         }
     }

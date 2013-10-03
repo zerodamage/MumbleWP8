@@ -17,28 +17,7 @@
     <phone:PhoneApplicationPage.Resources>
         <phone:JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
         <phone:JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
-        <Style x:Key="AddrBookJumpListStyle" TargetType="phone:LongListSelector">
-            <Setter Property="LayoutMode" Value="List" />
-            <Setter Property="Margin" Value="12,12,0,0"/>
-            <Setter Property="ItemTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
-                                Width="470" 
-                                Height="70" 
-                                Margin="6">
-                            <TextBlock Text="{Binding Key}"
-                                       Foreground="{Binding Converter={StaticResource ForegroundConverter}}"                                       
-                                       FontFamily="{StaticResource PhoneFontFamilySemiBold}"
-                                       FontSize="28"  
-                                       Padding="2"
-                                       VerticalAlignment="Bottom">
-                            </TextBlock>
-                        </Border> 
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        
         <DataTemplate x:Key="FavListItemTemplate">
             <Button Padding="0" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
@@ -71,7 +50,29 @@
                 </StackPanel>
             </Button>
         </DataTemplate>
-        <DataTemplate x:Key="AddrBookGroupHeaderTemplate">
+        <Style x:Key="GlobalListJumpListStyle" TargetType="phone:LongListSelector">
+            <Setter Property="LayoutMode" Value="List" />
+            <Setter Property="Margin" Value="12,12,0,0"/>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
+                                Width="470" 
+                                Height="70" 
+                                Margin="6">
+                            <TextBlock Text="{Binding Key}"
+                                       Foreground="{Binding Converter={StaticResource ForegroundConverter}}"                                       
+                                       FontFamily="{StaticResource PhoneFontFamilySemiBold}"
+                                       FontSize="28"  
+                                       Padding="2"
+                                       VerticalAlignment="Bottom">
+                            </TextBlock>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="GlobalListGroupHeaderTemplate">
             <Border Background="Transparent" Padding="5">
                 <Border Background="{StaticResource PhoneAccentBrush}" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Width="80" 
          Height="62" Margin="0,0,18,0" HorizontalAlignment="Left">
@@ -81,27 +82,25 @@
             </Border>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
-    <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <!--Pivot Control-->
-        <phone:Pivot Title="MUMBLE - SERVERS" LoadedPivotItem="Pivot_LoadingPivotItem_1">
-            <phone:PivotItem x:Name="pivotItem1" Header="Favorites">
-                <phone:LongListSelector ItemsSource="{Binding Favorites}" ItemTemplate="{StaticResource FavListItemTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tap="FavList_Tap" />
+        <phone:Pivot Title="MUMBLE - SERVERS" LoadedPivotItem="Pivot_LoadingPivotItem">
+            <phone:PivotItem x:Name="favsPivotItem" Header="Favorites">
+                <phone:LongListSelector Margin="11,0,0,0" ItemsSource="{Binding Favorites}" ItemTemplate="{StaticResource FavListItemTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Tap="FavList_Tap" />
             </phone:PivotItem>
             <phone:PivotItem Header="Europe">
-                <phone:LongListSelector ItemsSource="{Binding EUListGrouped}" GroupHeaderTemplate="{StaticResource AddrBookGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource AddrBookJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <phone:LongListSelector Margin="11,0,0,0" ItemsSource="{Binding EUListGrouped}" GroupHeaderTemplate="{StaticResource GlobalListGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource GlobalListJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </phone:PivotItem>
             <phone:PivotItem Header="Oceania">
-                <phone:LongListSelector ItemsSource="{Binding OCListGrouped}" GroupHeaderTemplate="{StaticResource AddrBookGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource AddrBookJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <phone:LongListSelector Margin="11,0,0,0" ItemsSource="{Binding OCListGrouped}" GroupHeaderTemplate="{StaticResource GlobalListGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource GlobalListJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </phone:PivotItem>
             <phone:PivotItem Header="South America">
-                <phone:LongListSelector ItemsSource="{Binding SAListGrouped}" GroupHeaderTemplate="{StaticResource AddrBookGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource AddrBookJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <phone:LongListSelector Margin="11,0,0,0" ItemsSource="{Binding SAListGrouped}" GroupHeaderTemplate="{StaticResource GlobalListGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource GlobalListJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </phone:PivotItem>
             <phone:PivotItem Header="North America">
-                <phone:LongListSelector ItemsSource="{Binding NAListGrouped}" GroupHeaderTemplate="{StaticResource AddrBookGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource AddrBookJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <phone:LongListSelector Margin="11,0,0,0" ItemsSource="{Binding NAListGrouped}" GroupHeaderTemplate="{StaticResource GlobalListGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource GlobalListJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </phone:PivotItem>
             <phone:PivotItem Header="Asia">
-                <phone:LongListSelector ItemsSource="{Binding ASListGrouped}" GroupHeaderTemplate="{StaticResource AddrBookGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource AddrBookJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <phone:LongListSelector Margin="11,0,0,0" ItemsSource="{Binding ASListGrouped}" GroupHeaderTemplate="{StaticResource GlobalListGroupHeaderTemplate}" ItemTemplate="{StaticResource GlobalListItemTemplate}" JumpListStyle="{StaticResource GlobalListJumpListStyle}" IsGroupingEnabled="true" HideEmptyGroups="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>

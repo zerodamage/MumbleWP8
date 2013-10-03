@@ -108,15 +108,13 @@ namespace MumbleWP8
             
         }
 
-
         private void sndmsg_Tap(object sender, RoutedEventArgs e)
         {
             ChannelItem item = (sender as MenuItem).DataContext as ChannelItem;
-            if (item.GetType().Equals(typeof(User)))
-            {
-                chatTarget.DataContext = null;
-                chatTarget.DataContext = item;
-            }
+            
+            chatTarget.DataContext = null;
+            chatTarget.DataContext = item;
+
             MainView.SelectedIndex = 1;
         }
 
@@ -141,11 +139,6 @@ namespace MumbleWP8
             NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative));
         }
 
-        private void TextBox_TextInputUpdate(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            MessageBox.Show("text done");
-        }
-
         private void TextBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if(e.Key.Equals(Key.Enter))
@@ -162,7 +155,6 @@ namespace MumbleWP8
         {
             if (e.Item == ChatPivot)
             {
-                chatbox1.Text = "Type message";
                 chatbox1.SelectAll();
             }
         }
