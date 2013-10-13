@@ -93,6 +93,7 @@
     <Compile Include="Certificates.xaml.cs">
       <DependentUpon>Certificates.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChatMessage.cs" />
     <Compile Include="EditServer.xaml.cs">
       <DependentUpon>EditServer.xaml</DependentUpon>
     </Compile>
@@ -100,6 +101,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Server.cs" />
     <Compile Include="Servers.xaml.cs">
       <DependentUpon>Servers.xaml</DependentUpon>
     </Compile>
@@ -116,6 +118,7 @@
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChannelItem.cs" />
     <Compile Include="ViewModels\ChannelViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
